@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!--nem-sdk-->
+  <script src="nem-sdk.js"></script>
+  <!--ccxt-->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ccxt@1.18.750/dist/ccxt.browser.js"></script>
+  <!--main program-->
+  <script src="main.js"></script>
+</head>
+<body>
+  <ons-page>
+    <ons-tabbar swipeable position="auto">
+        <ons-tab page="home.html" label="ホーム" icon="home" active></ons-tab>
+        <ons-tab page="setting.html" label="設定" icon="cog"></ons-tab>
+    </ons-tabbar>
+  </ons-page>
+  <template id="home.html">
+    <ons-page id="Home">
+      <p>請求金額入力</p>
+      <ons-input id="price" type="number" modifier="underbar" placeholder="金額を入力してください"></ons-input>円<br>
+      <p><ons-button onclick="executePayment()">請求QRコード表示</ons-button></p>
+      <p><ons-button onclick="clearShowData()">クリア</ons-button></p>
+      <p>請求金額情報</p>
+      ( <span id="amount">NONE</span> + <span id="fee">NONE</span> ) [XEM]<br>
+      X <span id="unitPriceLast">NONE</span> [JPY/XEM]<br>
+      = <span id="computedPrice">NONE</span> [JPY]
+      <p>請求QRコード</p>
+      <div id="qr"></div>
+      <p>着金情報</p>
+      Hash: <span id="unconfirmedTxHash" style="font-size: 8px;">NONE</span><br>
+      Address: <span id="senderAddress" style="font-size: 10px;">NONE</span><br>
+      Amount: <span id="unconfirmedAmount">NONE</span> [XEM]<br>
+      Status: <span id="txStatus">NONE</span><br>
+      <p>取引情報</p>
+      Exchange: <span id="exchangeStatus">NONE</span><br>
+      Received: <span id="received">NONE</span> [JPY]<br>
+      Remains: <span id="remainsAmount">NONE</span> [XEM]<br>
+      Total Fee: <span id="totalFeeRatio">NONE</span> [%]<br>
+      <p><ons-button onclick="test()">テスト</ons-button></p>
+    </ons-page>
+  </template>
+  <template id="setting.html">
+    <ons-page id="Setting">
+      <h2>設定</h2>
+      <h3>請求用アドレス設定</h3>
+      <p><ons-input id="address" modifier="underbar" placeholder="アドレス"></ons-input></p>
+      <p><ons-input id="privateKey" modifier="underbar" placeholder="秘密鍵" type="password"></ons-input></p>
+      <p><ons-button onclick="saveAddress()">保存</ons-button></p>
+      <h3>取引所API設定</h3>
+      <p><ons-input id="apiKey" modifier="underbar" placeholder="API Key"></ons-input></p>
+      <p><ons-input id="apiSecret" modifier="underbar" placeholder="API Secret" type="password"></ons-input></p>
+      <p><ons-button onclick="saveAPI()">保存</ons-button></p>
+      <h3>取引所入金用アドレス設定</h3>
+      <p><ons-input id="depositAddress" modifier="underbar" placeholder="取引所アドレス"></ons-input></p>
+      <p><ons-input id="depositMessage" modifier="underbar" placeholder="取引所入金メッセージ"></ons-input></p>
+      <p><ons-button onclick="saveDepositAddress()">保存</ons-button></p>
+    </ons-page>
+  </template>
+  <audio id="soundUnconfirmed">
+    <source src="money-drop1.mp3">
+  </audio>
+  <audio id="soundConfirmed">
+    <source src="clearing1.mp3">
+  </audio>
+</body>
+</html>
